@@ -1,16 +1,13 @@
 package th4mz0.credit.application.system.dto
 
-import jakarta.persistence.Column
-import jakarta.persistence.Enumerated
-import jakarta.persistence.ManyToOne
-import jakarta.validation.constraints.Future
-import jakarta.validation.constraints.NotNull
+
+import jakarta.validation.constraints.*
 import th4mz0.credit.application.system.entity.Credit
 import th4mz0.credit.application.system.entity.Customer
-import th4mz0.credit.application.system.enummeration.Status
+
 import java.math.BigDecimal
 import java.time.LocalDate
-import java.util.*
+
 
 data class CreditDto(
     @field:NotNull(message = "Invalid input")
@@ -21,7 +18,8 @@ data class CreditDto(
     val dayFristInstallment: LocalDate,
 
     @field:NotNull(message = "Invalid input")
-    // TODO - max value
+    @field:Max( value = 48)
+    @field:Min( value = 1)
     val numberOfInstallments: Int,
 
     @field:NotNull(message = "Invalid input")

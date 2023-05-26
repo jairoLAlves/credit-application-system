@@ -5,6 +5,8 @@ import th4mz0.credit.application.system.entity.Credit
 import th4mz0.credit.application.system.exception.BusinessException
 import th4mz0.credit.application.system.repository.CreditRepository
 import th4mz0.credit.application.system.service.ICreditService
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
@@ -14,9 +16,13 @@ class CreditService(
 ): ICreditService {
     override fun save(credit: Credit): Credit {
 
+        this.validDayFirstInstallment(dayFirstInstallment =  credit.dayFristInstallment)
+
         credit.apply {
             customer = customerService.findById(credit.customer?.id!!)
+
         }
+
 
 
         return this.creditRepository.save(credit)
@@ -30,5 +36,10 @@ class CreditService(
         val credit: Credit = this.creditRepository.findByCreditCode(creditCode) ?: throw BusinessException("Creditcode $creditCode not found")
         return if(credit.customer?.id == customerId) credit else throw IllegalArgumentException("Contact admin")
 
+    }
+
+    private fun validDayFirstInstallment(dayFirstInstallment: LocalDate): Boolean {
+        return if (dayFirstInstallment.isBefore(LocalDate.now().plusMonths(3))) true
+        else throw BusinessException("Invalid Date")
     }
 }
