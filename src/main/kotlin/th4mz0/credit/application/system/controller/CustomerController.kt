@@ -1,5 +1,6 @@
 package th4mz0.credit.application.system.controller
 
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import th4mz0.credit.application.system.dto.CustomerDto
 import th4mz0.credit.application.system.dto.CustomerUpdateDto
@@ -26,7 +28,7 @@ class CustomerController(
 
 
     @PostMapping
-    fun salveCustomer(@RequestBody customerDto: CustomerDto): ResponseEntity<String> {
+    fun salveCustomer(@RequestBody @Valid customerDto: CustomerDto): ResponseEntity<String> {
         val savedCustomer =  this.customerService.save(customer = customerDto.toEntity())
         return ResponseEntity.status(HttpStatus.CREATED)
             .body("Customer ${savedCustomer.email} saved!")
@@ -35,7 +37,7 @@ class CustomerController(
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): ResponseEntity<CustomerView> {
+    fun findById(@PathVariable  id: Long): ResponseEntity<CustomerView> {
        val customer: Customer =  this.customerService.findById(id=id)
         return  ResponseEntity.status(HttpStatus.OK).body(CustomerView(
             customer = customer
@@ -46,15 +48,16 @@ class CustomerController(
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) {
-        this.customerService.delete(id=id)
+        this.customerService.delete(id)
 
     }
 
 
     @PatchMapping
-    fun updateCustomer(@RequestParam(value = "customerId") id: Long,
-                       @RequestBody customerUpdateDto: CustomerUpdateDto,): ResponseEntity<CustomerView> {
+    fun updateCustomer(@RequestParam(value = "customerId")  id: Long,
+                       @RequestBody  @Valid customerUpdateDto: CustomerUpdateDto,): ResponseEntity<CustomerView> {
 
         val customer: Customer = this.customerService.findById(id)
 
