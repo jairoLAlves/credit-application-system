@@ -1,5 +1,6 @@
 package th4mz0.credit.application.system.exception
 
+import jakarta.validation.UnexpectedTypeException
 import org.springframework.dao.DataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -86,5 +87,7 @@ class RestExceptionHandler {
             ),
         )
     }
+
+
 
 }
