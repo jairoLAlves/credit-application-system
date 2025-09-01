@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:h2:mem:credit_application_system_db
-    username: th4mz0
-    password: th4mz0854
+    username: username
+    password: password
   jpa:
     show-sql: true
     #hibernate:
